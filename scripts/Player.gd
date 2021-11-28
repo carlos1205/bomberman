@@ -1,5 +1,4 @@
 extends Area2D
-signal hit
 signal plant_bombe
 
 export var speed = 400
@@ -9,6 +8,7 @@ var planted
 var canPassBombe
 
 const BOMBE = "Bombe"
+const EXPLOSION = "Explosion"
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -22,13 +22,17 @@ func start(pos):
 	position = pos
 	bombes = 1
 	planted = 0
+	$AnimatedSprite.animation = "still-front"
 	show()
 	$CollisionShape2D.disabled = false
 
 func collision(body):
+	if EXPLOSION == body.name:
+		$CollisionShape2D.set_deferred("disabled", true)
+		dead()
+	
 	if BOMBE == body.name and !canPassBombe:
 		var pos = body.position
-		var velocity = Vector2()
 		if pos.x < position.x:
 			position.x += 15
 		if pos.x > position.x:
@@ -81,3 +85,7 @@ func _process(delta):
 			$AnimatedSprite.animation = "still-front"
 		elif "walk-side" == $AnimatedSprite.animation:
 			$AnimatedSprite.animation = "still-side"
+
+
+func dead():
+	queue_free()

@@ -2,6 +2,7 @@ extends Node
 
 export (PackedScene) var Bombe
 export (PackedScene) var Player
+export (PackedScene) var Explosion
 
 var player
 func _ready():
@@ -27,4 +28,7 @@ func pre_configure_game():
 	return myPlayer
 
 func bombe_finish(pos):
+	var explosion = Explosion.instance()
+	add_child(explosion)
+	explosion.position = pos
 	player.planted -= 1

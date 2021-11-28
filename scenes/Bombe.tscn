@@ -62,6 +62,7 @@ __meta__ = {
 scale = Vector2( 3, 3 )
 frames = SubResource( 7 )
 animation = "bombe"
+frame = 2
 playing = true
 __meta__ = {
 "_edit_group_": true
@@ -83,5 +84,4 @@ __meta__ = {
 wait_time = 6.0
 
 [connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_entered"]
-[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="explose"]
 [connection signal="timeout" from="Timer" to="." method="time_out"]
