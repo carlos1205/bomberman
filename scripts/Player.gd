@@ -4,11 +4,48 @@ signal plant_bombe
 
 export var speed = 400
 var screen_size
+var bombes
+var planted
+var canPassBombe
 
-# Called when the node enters the scene tree for the first time.
+const BOMBE = "Bombe"
+
 func _ready():
 	screen_size = get_viewport_rect().size
 	hide()
+
+func _input(event):
+	if event.is_action_pressed("plant"):
+		plantBombe()
+
+func start(pos):
+	position = pos
+	bombes = 1
+	planted = 0
+	show()
+	$CollisionShape2D.disabled = false
+
+func collision(body):
+	if BOMBE == body.name and !canPassBombe:
+		var pos = body.position
+		var velocity = Vector2()
+		if pos.x < position.x:
+			position.x += 15
+		if pos.x > position.x:
+			position.x -= 15
+		if pos.y < position.y:
+			position.y += 15
+		if pos.y > position.y:
+			position.y -= 15
+
+func _on_Player_body_exited(body):
+	canPassBombe = false
+
+func plantBombe():
+	if(planted < bombes):
+		planted += 1
+		emit_signal("plant_bombe", position)
+		canPassBombe = true
 
 func _process(delta):
 	var velocity = Vector2()
@@ -44,20 +81,3 @@ func _process(delta):
 			$AnimatedSprite.animation = "still-front"
 		elif "walk-side" == $AnimatedSprite.animation:
 			$AnimatedSprite.animation = "still-side"
-
-func _input(event):
-	if event.is_action_pressed("plant"):
-		plantBombe()
-
-func start(pos):
-	position = pos
-	show()
-	$CollisionShape2D.disabled = true
-
-func _on_Area2D_body_entered(body):
-	hide()
-	emit_signal("hit")
-	$CollisionShape2D.set_deferred("disable", true)
-
-func plantBombe():
-	emit_signal("plant_bombe", position)
