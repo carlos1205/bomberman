@@ -1,7 +1,7 @@
-extends Area2D
+extends KinematicBody2D
 signal plant_bombe
 
-export var speed = 400
+export var speed = 200
 var screen_size
 var bombes
 var planted
@@ -25,7 +25,7 @@ func start(pos):
 	$AnimatedSprite.animation = "still-front"
 	show()
 	$CollisionShape2D.disabled = false
-
+	
 func collision(body):
 	if EXPLOSION == body.name:
 		$CollisionShape2D.set_deferred("disabled", true)
@@ -51,8 +51,7 @@ func plantBombe():
 		emit_signal("plant_bombe", position)
 		canPassBombe = true
 
-func _process(delta):
-	var velocity = Vector2()
+func getInput(delta, velocity):
 	if Input.is_action_pressed("ui_right"):
 		velocity.x += 1
 	if Input.is_action_pressed("ui_left"):
@@ -66,10 +65,12 @@ func _process(delta):
 		$AnimatedSprite.play()
 	else:
 		$AnimatedSprite.stop()
-	position += velocity * delta
-	position.x = clamp(position.x, 0, screen_size.x)
-	position.y = clamp(position.y, 0, screen_size.y)
-	
+	return velocity
+
+func _physics_process(delta):
+	var velocity = Vector2()
+	velocity = getInput(delta, velocity)
+	velocity = move_and_slide(velocity, Vector2(0,-1))
 	if velocity.x != 0:
 		$AnimatedSprite.animation = "walk-side"
 		$AnimatedSprite.flip_v = false
@@ -85,7 +86,13 @@ func _process(delta):
 			$AnimatedSprite.animation = "still-front"
 		elif "walk-side" == $AnimatedSprite.animation:
 			$AnimatedSprite.animation = "still-side"
+	is_colliding()
 
+func is_colliding():
+	for i in get_slide_count():
+		var collision = get_slide_collision(i)
+		if collision:
+			emit_signal('collided', collision)
 
 func dead():
 	queue_free()

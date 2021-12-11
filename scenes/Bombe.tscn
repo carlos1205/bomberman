@@ -35,19 +35,19 @@ region = Rect2( 80, 0, 16, 16 )
 
 [sub_resource type="SpriteFrames" id=7]
 animations = [ {
-"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
-"loop": true,
-"name": "bombe",
-"speed": 2.0
-}, {
 "frames": [  ],
 "loop": true,
 "name": "explosion",
 "speed": 5.0
+}, {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "bombe",
+"speed": 2.0
 } ]
 
 [sub_resource type="CircleShape2D" id=8]
-radius = 25.1794
+radius = 17.0
 
 [node name="Bombe" type="RigidBody2D"]
 mass = 0.00102041
@@ -59,10 +59,9 @@ __meta__ = {
 }
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-scale = Vector2( 3, 3 )
+scale = Vector2( 2, 2 )
 frames = SubResource( 7 )
 animation = "bombe"
-frame = 2
 playing = true
 __meta__ = {
 "_edit_group_": true

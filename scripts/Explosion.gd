@@ -7,6 +7,7 @@ func _ready():
 	$Timer.start(seconds)
 
 func time_out():
+	$Timer.start(seconds)
 	expand()
 
 func expand():
