@@ -17,13 +17,13 @@ orbit_velocity_random = 0.0
 linear_accel = 35.0
 radial_accel = 5.0
 angle = 10.0
-scale = 3.0
+scale = 2.8
 color = Color( 0.905882, 0.639216, 0.447059, 1 )
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 8.66667
+radius = 8.00694
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[node name="Explosion" type="RigidBody2D"]
 gravity_scale = 0.0
 script = ExtResource( 2 )
 
@@ -43,5 +43,4 @@ shape = SubResource( 2 )
 
 [node name="Timer" type="Timer" parent="."]
 
-[connection signal="body_shape_entered" from="." to="." method="_on_RigidBody2D_body_shape_entered"]
 [connection signal="timeout" from="Timer" to="." method="time_out"]

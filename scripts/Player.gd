@@ -6,10 +6,12 @@ var reach = 1
 var screen_size
 var bombes
 var planted
-var canPassBombe
+var gameOver = false
 
 const BOMBE = "Bombe"
-const EXPLOSION = "Explosion"
+const EXPLOSION = "@Explosion"
+const TILE = "TileMap"
+
 
 func _ready():
 	screen_size = get_viewport_rect().size
@@ -32,7 +34,7 @@ func collision(body):
 		$CollisionShape2D.set_deferred("disabled", true)
 		dead()
 	
-	if BOMBE == body.name and !canPassBombe:
+	if BOMBE == body.name:
 		var pos = body.position
 		if pos.x < position.x:
 			position.x += 15
@@ -43,16 +45,15 @@ func collision(body):
 		if pos.y > position.y:
 			position.y -= 15
 
-func _on_Player_body_exited(body):
-	canPassBombe = false
-
 func plantBombe():
 	if(planted < bombes):
 		planted += 1
 		emit_signal("plant_bombe", position)
-		canPassBombe = true
 
 func getInput(delta, velocity):
+	if gameOver:
+		return Vector2(0,0)
+	
 	if Input.is_action_pressed("ui_right"):
 		velocity.x += 1
 	if Input.is_action_pressed("ui_left"):
@@ -93,8 +94,13 @@ func is_colliding():
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
 		if collision:
-			emit_signal('collided', collision)
-
+			if(collision.collider.name == TILE):
+				emit_signal('collided', collision)
+			
+			if(EXPLOSION.is_subsequence_ofi(collision.collider.name)):
+				$CollisionShape2D.disabled = true
+				gameOver = true
+				dead()
 func dead():
 	queue_free()
 

@@ -13,7 +13,6 @@ func get_radius():
 	return $CollisionShape2D.shape.radius
 
 func time_out():
-	print("Time out!")
 	$Timer.stop()
 	explose()
 

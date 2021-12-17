@@ -8,8 +8,10 @@ func get_cell_center_position(pos):
 func is_wall(pos):
 	var world = $TileMap.world_to_map(pos)
 	var tile = $TileMap.get_cell(world.x, world.y)
-	return tile == 0
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	return tile
+	
+func broke_tile(pos):
+	var world = $TileMap.world_to_map(pos)
+	$TileMap.set_cell(world.x, world.y, 1)
 #func _process(delta):
 #	pass

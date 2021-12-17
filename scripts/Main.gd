@@ -1,4 +1,5 @@
 extends Node
+signal broke_tile
 
 export (PackedScene) var Bombe
 export (PackedScene) var Player
@@ -6,13 +7,14 @@ export (PackedScene) var Explosion
 
 var player
 func _ready():
-	new_game()
+	new_game()	
 
 func new_game():
 	player = pre_configure_game()
 	add_child(player)
 	player.connect("plant_bombe", self, "bombe_insert")
 	player.start($StartPosition.position)
+	connect("broke_tile", $TileMap, "broke_tile")
 
 func bombe_insert(pos):
 	var bombe = Bombe.instance()
@@ -36,31 +38,43 @@ func expand(pos, player_reach):
 	for i in range(player_reach+1):
 		var plus = pos.x + (size.x * i)
 		var location = Vector2(plus, pos.y)
-		if($TileMap.is_wall(location)):
+		var tile = $TileMap.is_wall(location)
+		if(tile == 0):
 			break
 		expode(location)
-		
+		if(tile == 2):
+			emit_signal('broke_tile', location)
+	
 	for i in range(player_reach+1):
 		var minus = pos.x - (size.x * i)
 		var location = Vector2(minus, pos.y)
-		if($TileMap.is_wall(location)):
+		var tile = $TileMap.is_wall(location)
+		if(tile == 0):
 			break
 		expode(location)
+		if(tile == 2):
+			emit_signal('broke_tile', location)
 	
 	for i in range(player_reach+1):
 		var plus = pos.y + (size.y * i)
-		var location = Vector2(pos.y, plus)
-		if($TileMap.is_wall(location)):
+		var location = Vector2(pos.x, plus)
+		var tile = $TileMap.is_wall(location)
+		if(tile == 0):
 			break
 		expode(location)
-		
+		if(tile == 2):
+			emit_signal('broke_tile', location)
+	
 	for i in range(player_reach+1):
 		var minus = pos.y - (size.y * i)
 		var location = Vector2(pos.x, minus)
-		if($TileMap.is_wall(location)):
+		var tile = $TileMap.is_wall(location)
+		if(tile == 0):
 			break
 		expode(location)
-		
+		if(tile == 2):
+			emit_signal('broke_tile', location)
+	
 	player.planted -= 1
 
 func expode(pos):
