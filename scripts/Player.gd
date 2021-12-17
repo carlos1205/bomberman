@@ -2,6 +2,7 @@ extends KinematicBody2D
 signal plant_bombe
 
 export var speed = 200
+var reach = 1
 var screen_size
 var bombes
 var planted
@@ -96,3 +97,6 @@ func is_colliding():
 
 func dead():
 	queue_free()
+
+func get_reach():
+	return reach

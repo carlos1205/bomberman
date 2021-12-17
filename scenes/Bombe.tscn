@@ -47,7 +47,7 @@ animations = [ {
 } ]
 
 [sub_resource type="CircleShape2D" id=8]
-radius = 17.0
+radius = 23.4094
 
 [node name="Bombe" type="RigidBody2D"]
 mass = 0.00102041
@@ -59,9 +59,10 @@ __meta__ = {
 }
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-scale = Vector2( 2, 2 )
+scale = Vector2( 3, 3 )
 frames = SubResource( 7 )
 animation = "bombe"
+frame = 3
 playing = true
 __meta__ = {
 "_edit_group_": true

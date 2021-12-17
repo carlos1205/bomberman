@@ -13,7 +13,7 @@ Player = ExtResource( 3 )
 Explosion = ExtResource( 6 )
 
 [node name="StartPosition" type="Position2D" parent="."]
-position = Vector2( 48, 48 )
+position = Vector2( 80, 80 )
 __meta__ = {
 "_edit_group_": true
 }

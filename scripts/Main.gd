@@ -17,18 +17,53 @@ func new_game():
 func bombe_insert(pos):
 	var bombe = Bombe.instance()
 	add_child(bombe)
-	bombe.position = pos
+	var cell_pos = $TileMap.get_cell_center_position(pos)
+	bombe.position = cell_pos
 	bombe.connect("explosion", self, "bombe_finish")
 
 func pre_configure_game():
-	var selfPeerId = get_tree().get_network_unique_id()
-	
 	var myPlayer = Player.instance()
 	myPlayer.set_name("my_player")
 	return myPlayer
 
 func bombe_finish(pos):
+	var player_reach = player.get_reach()
+	expand(pos, player_reach)
+
+func expand(pos, player_reach):
+	expode(pos)
+	var size = $TileMap/TileMap.get_cell_size()
+	for i in range(player_reach+1):
+		var plus = pos.x + (size.x * i)
+		var location = Vector2(plus, pos.y)
+		if($TileMap.is_wall(location)):
+			break
+		expode(location)
+		
+	for i in range(player_reach+1):
+		var minus = pos.x - (size.x * i)
+		var location = Vector2(minus, pos.y)
+		if($TileMap.is_wall(location)):
+			break
+		expode(location)
+	
+	for i in range(player_reach+1):
+		var plus = pos.y + (size.y * i)
+		var location = Vector2(pos.y, plus)
+		if($TileMap.is_wall(location)):
+			break
+		expode(location)
+		
+	for i in range(player_reach+1):
+		var minus = pos.y - (size.y * i)
+		var location = Vector2(pos.x, minus)
+		if($TileMap.is_wall(location)):
+			break
+		expode(location)
+		
+	player.planted -= 1
+
+func expode(pos):
 	var explosion = Explosion.instance()
 	add_child(explosion)
 	explosion.position = pos
-	player.planted -= 1
