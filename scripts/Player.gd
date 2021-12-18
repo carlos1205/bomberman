@@ -9,8 +9,9 @@ var planted
 var gameOver = false
 
 const BOMBE = "Bombe"
-const EXPLOSION = "@Explosion"
+const EXPLOSION = "Explosion"
 const TILE = "TileMap"
+const ENEMY = "Enemy"
 
 
 func _ready():
@@ -98,6 +99,11 @@ func is_colliding():
 				emit_signal('collided', collision)
 			
 			if(EXPLOSION.is_subsequence_ofi(collision.collider.name)):
+				$CollisionShape2D.disabled = true
+				gameOver = true
+				dead()
+				
+			if(ENEMY.is_subsequence_ofi(collision.collider.name)):
 				$CollisionShape2D.disabled = true
 				gameOver = true
 				dead()
